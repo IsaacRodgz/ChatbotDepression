@@ -49,12 +49,12 @@ app.post('/webhook/', function(req, res) {
 
 function decideMessage(sender, text1) {
   let text = text1.toLowerCase()
-  if (text.includes("hola")) {
+  if (text.includes("start")) {
     sendButtonMessage(sender, "¿Que quieres hacer?")
   } else if(text.includes("chatear")) {
     sendImageMessage(sender, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkgQAxIYGfodDctizYg_auYhrJO4Jlcy1tGQbvNy9Brp-ZIpNXNQ")
   } else {
-    sendText(sender, "No reconozco el comando")
+    sendText(sender, "NDisculpa, no entiendo lo que dices")
   }
 }
 
