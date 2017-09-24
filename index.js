@@ -36,14 +36,66 @@ app.post('/webhook/', function(req, res) {
     let sender = event.sender.id
     if (event.message && event.message.text) {
       let text = event.message.text
-      sendText(sender, "Text echo: " + text.substring(0, 100))
+      decideMessage(sender, text)
+    }
+    if (event.postback) {
+      let text = JSON.stringify(event.postback)
+      decideMessage(sender, text)
+
     }
   }
   res.sendStatus(200)
 })
 
-function sendText(sender, text) {
-  let messageData = {text: text}
+function decideMessage(sender, text1) {
+  let text = text1.toLowerCase()
+  if (text.includes("hola")) {
+    sendButtonMessage(sender, "¿Que quieres hacer?")
+  } else if(text.includes("chatear")) {
+    sendImageMessage(sender, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkgQAxIYGfodDctizYg_auYhrJO4Jlcy1tGQbvNy9Brp-ZIpNXNQ")
+  } else {
+    sendText(sendText, "No reconozco el comando")
+  }
+}
+
+function sendButtonMessage(sender, text) {
+  let messageData = {
+    "attachment":{
+      "type":"template",
+      "payload":{
+        "template_type":"button",
+        "text": text,
+        "buttons":[
+          {
+            "type":"postback",
+            "payload":"chatear",
+            "title":"Empezar a chatear"
+          },
+          {
+            "type":"postback",
+            "payload":"web",
+            "title":"Ir a la pagina web"
+          }
+        ]
+      }
+    }
+  }
+  sendRequest(sender, messageData)
+}
+
+function sendImageMessage(sender, imageURL) {
+  let messageData = {
+    "attachment":{
+      "type":"image",
+      "payload":{
+        "url":imageURL
+      }
+    }
+  }
+  sendRequest(sender, messageData)
+}
+
+function sendRequest(sender, messageData) {
   request({
     url: "https://graph.facebook.com/v2.6/me/messages",
     qs: {access_token: token},
@@ -59,6 +111,11 @@ function sendText(sender, text) {
       console.log("response body error")
     }
   })
+}
+
+function sendText(sender, text) {
+  let messageData = {text: text}
+  sendRequest(sender, text)
 }
 
 app.listen(app.get('port'), function() {
