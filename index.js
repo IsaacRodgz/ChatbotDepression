@@ -95,6 +95,11 @@ function sendImageMessage(sender, imageURL) {
   sendRequest(sender, messageData)
 }
 
+function sendText(sender, text) {
+  let messageData = {text: text}
+  sendRequest(sender, text)
+}
+
 function sendRequest(sender, messageData) {
   request({
     url: "https://graph.facebook.com/v2.6/me/messages",
@@ -111,11 +116,6 @@ function sendRequest(sender, messageData) {
       console.log("response body error")
     }
   })
-}
-
-function sendText(sender, text) {
-  let messageData = {text: text}
-  sendRequest(sender, text)
 }
 
 app.listen(app.get('port'), function() {
