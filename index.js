@@ -54,7 +54,7 @@ function decideMessage(sender, text1) {
   } else if(text.includes("chatear")) {
     sendImageMessage(sender, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkgQAxIYGfodDctizYg_auYhrJO4Jlcy1tGQbvNy9Brp-ZIpNXNQ")
   } else {
-    sendText(sendText, "No reconozco el comando")
+    sendText(sender, "No reconozco el comando")
   }
 }
 
