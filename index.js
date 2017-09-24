@@ -96,7 +96,7 @@ function sendImageMessage(sender, imageURL) {
 }
 
 function sendText(sender, text) {
-  let messageData = {text: text}
+  let messageData = {"text": text}
   sendRequest(sender, text)
 }
 
