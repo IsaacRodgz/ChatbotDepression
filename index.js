@@ -50,11 +50,12 @@ app.post('/webhook/', function(req, res) {
 function decideMessage(sender, text1) {
   let text = text1.toLowerCase()
   if (text.includes("start")) {
-    sendButtonMessage(sender, "¿Que quieres hacer?")
+    sendButtonMessage(sender, "¿Que quieres hacer?", [["Empezar a chatear", "chatear"], ["Ir a la pagina web", "web"]])
   } else if(text.includes("chatear")) {
     sendImageMessage(sender, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkgQAxIYGfodDctizYg_auYhrJO4Jlcy1tGQbvNy9Brp-ZIpNXNQ")
+
   } else {
-    sendText(sender, "NDisculpa, no entiendo lo que dices")
+    sendText(sender, "Disculpa, no entiendo lo que dices")
   }
 }
 
@@ -68,13 +69,13 @@ function sendButtonMessage(sender, text) {
         "buttons":[
           {
             "type":"postback",
-            "payload":"chatear",
-            "title":"Empezar a chatear"
+            "title":"Empezar a chatear",
+            "payload":"chatear"
           },
           {
             "type":"postback",
-            "payload":"web",
-            "title":"Ir a la pagina web"
+            "title":"Ir a la pagina web",
+            "payload":"web"
           }
         ]
       }
