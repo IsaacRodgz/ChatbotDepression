@@ -4,6 +4,9 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const request = require('request')
 
+const v_token = process.env.FB_VERIFY_TOKEN
+const a_token = process.env.FB_ACCESS_TOKEN
+
 const app = express()
 
 app.set('port', (process.env.PORT || 5000))
@@ -18,12 +21,10 @@ app.get('/', function(req, res) {
   res.send("Hola, estoy aqui para ayudarte")
 })
 
-let token = "EAAbUQ7qNkMcBALZA4Vd45rYk9mZA4E6VtACrn3EgftbRSsKjZCJpVdnyvwOXapRTTvlBNe7GPOg8sZCp6mAe7HZC7hcoFECHrpqQOcJAXtycvfXCLVqjCSy0gtgYgpiZANhLYvTbbtTBU9sGDz0B7pK59MDLeU1LcdB4Kh3cZCehAZDZD"
-
 //Facebook
 
 app.get('/webhook/', function(req, res) {
-  if (req.query['hub.verify_token'] === "blondiebytes") {
+  if (req.query['hub.verify_token'] === v_token) {
     res.send(req.query['hub.challenge'])
   }
   res.send("Wrong Token")
@@ -104,7 +105,7 @@ function sendText(sender, text) {
 function sendRequest(sender, messageData) {
   request({
     url: "https://graph.facebook.com/v2.6/me/messages",
-    qs: {access_token: token},
+    qs: {access_token: a_token},
     method: "POST",
     json: {
       recipient: {id: sender},
