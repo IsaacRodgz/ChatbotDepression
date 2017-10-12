@@ -1,5 +1,10 @@
+INFORMACIÓN QUE PROPORCIONAS A ESTA APLICACIÓN:
+Perfil público (obligatorio)
+Lista de amigos
+Dirección de correo electrónico
+Fecha de nacimiento
+Ciudad actual
 
-
-INFORMACIÃ“N QUE PROPORCIONAS A ESTA APLICACIÃ“N: Perfil pÃºblico (obligatorio) Lista de amigos DirecciÃ³n de correo electrÃ³nico Fecha de nacimiento Ciudad actual
-
-Esta aplicaciÃ³n busca brindar atenciÃ³n a usuarios que puedan requerir atenciÃ³n psicolÃ³gica. No tiene fines de lucro y la informaciÃ³n recopilada de los usuarios serÃ¡ sÃ³lamente usada con fines de mejorar la experiencia del usuario dentro de la aplicaciÃ³n.
+Esta aplicación busca brindar atención a usuarios que puedan requerir atención psicológica.
+No tiene fines de lucro y la información recopilada de los usuarios será sólamente usada
+con fines de mejorar la experiencia del usuario dentro de la aplicación.
