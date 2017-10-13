@@ -1,14 +1,15 @@
 import os
 import sys
 import json
-
+from os import environ
 import requests
 from flask import Flask, request
 
 app = Flask(__name__)
-
-v_token = process.env.FB_VERIFY_TOKEN
-a_token = process.env.FB_ACCESS_TOKEN
+v_token = environ.get('FB_VERIFY_TOKEN')
+#v_token = process.env.FB_VERIFY_TOKEN
+a_token = environ.get('FB_ACCESS_TOKEN')
+#a_token = process.env.FB_ACCESS_TOKEN
 
 @app.route('/', methods=['GET'])
 def verify():
