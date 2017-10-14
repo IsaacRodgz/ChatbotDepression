@@ -52,8 +52,8 @@ def webhook():
 
                     sender_id = messaging_event["sender"]["id"]
                     message_text = messaging_event["postback"]["payload"]
-                    log(message_text)
-                    send_message(sender_id, message_text)
+
+                    decideMessage(sender_id, message_text)
 
     return "ok", 200
 
@@ -95,7 +95,7 @@ def sendButtonMessage(sender_id, text, options):
 
     sendRequest(sender_id, message_data)
 
-def sendImageMessage(sender_id, URL):
+def sendImageMessage(sender_id, imageURL):
 
     message_data = {
         "attachment":{
