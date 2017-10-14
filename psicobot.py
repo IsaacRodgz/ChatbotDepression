@@ -29,7 +29,9 @@ def webhook():
 
     # endpoint for processing incoming messaging events
     data = request.get_json()
+    log("+++++++++++++++++++++++++++++++++++++++++++++")
     log(data)  # you may not want to log every incoming message in production, but it's good for testing
+    log("+++++++++++++++++++++++++++++++++++++++++++++")
 
     if data['object'] == 'page':
         for entry in data['entry']:
@@ -75,6 +77,7 @@ def decideMessage(sender_id, message_text):
                 "payload": "web"
             }  
         ]
+
         bot.send_button_message(sender_id, "¿Que quieres hacer?", buttons)
 
     elif "chatear" in text:
