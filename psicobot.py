@@ -1,6 +1,7 @@
 import os, sys
 from flask import Flask, request
 import json
+import requests
 #from utils import wit_response
 #from pymessenger import Bot
 from os import environ
