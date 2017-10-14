@@ -4,12 +4,11 @@ import json
 from os import environ
 import requests
 from flask import Flask, request
+from datetime import datetime
 
 app = Flask(__name__)
 v_token = environ.get('FB_VERIFY_TOKEN')
-#v_token = process.env.FB_VERIFY_TOKEN
 a_token = environ.get('FB_ACCESS_TOKEN')
-#a_token = process.env.FB_ACCESS_TOKEN
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -27,7 +26,6 @@ def webhook():
 
     # endpoint for processing incoming messaging events
     data = request.get_json()
-    log("~~~~~~~~~~~~~~~~")
     log(data)  # you may not want to log every incoming message in production, but it's good for testing
 
     if data['object'] == 'page':
