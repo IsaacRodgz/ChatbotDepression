@@ -2,7 +2,7 @@ import os, sys
 from flask import Flask, request
 import json
 import requests
-from utils import wit_response
+#from utils import wit_response
 from pymessenger import Bot
 from os import environ
 
@@ -81,10 +81,11 @@ def decideMessage(sender_id, message_text):
         bot.send_button_message(sender_id, "¿Que quieres hacer?", buttons)
 
     elif "chatear" in text:
-        sendImageMessage(sender_id, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkgQAxIYGfodDctizYg_auYhrJO4Jlcy1tGQbvNy9Brp-ZIpNXNQ")
+        #sendImageMessage(sender_id, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkgQAxIYGfodDctizYg_auYhrJO4Jlcy1tGQbvNy9Brp-ZIpNXNQ")
+        bot.send_message(sender_id, "Disculpa, no entiendo lo que dices")
 
     else:
-        sendText(sender_id, "Disculpa, no entiendo lo que dices")
+        bot.send_message(sender_id, "Disculpa, no entiendo lo que dices")
 
 def sendButtonMessage(sender_id, text, options):
     message_data = {
