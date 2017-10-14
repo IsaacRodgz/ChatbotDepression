@@ -2,8 +2,8 @@ import os, sys
 from flask import Flask, request
 import json
 import requests
-#from utils import wit_response
-#from pymessenger import Bot
+from utils import wit_response
+from pymessenger import Bot
 from os import environ
 
 app = Flask(__name__)
@@ -11,6 +11,7 @@ app = Flask(__name__)
 v_token = environ.get('FB_VERIFY_TOKEN')
 a_token = environ.get('FB_ACCESS_TOKEN')
 
+bot = Bot(a_token)
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -62,7 +63,19 @@ def decideMessage(sender_id, message_text):
     text = message_text.lower()
 
     if "start" in text:
-        sendButtonMessage(sender_id, "¿Que quieres hacer?", [["Empezar a chatear", "chatear"], ["Ir a la pagina web", "web"]])
+        buttons = [
+            {
+                "type":"postback",
+                "title": "Empezar a chatear",
+                "payload": "chatear"
+            },
+            {
+                "type":"postback",
+                "title": "Ir a la pagina web",
+                "payload": "web"
+            }  
+        ]
+        bot.send_button_message(sender_id, "¿Que quieres hacer?", buttons)
 
     elif "chatear" in text:
         sendImageMessage(sender_id, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkgQAxIYGfodDctizYg_auYhrJO4Jlcy1tGQbvNy9Brp-ZIpNXNQ")
