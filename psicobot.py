@@ -61,13 +61,13 @@ def decideMessage(sender_id, message_text):
     text = message_text.lower()
 
     if "start" in text:
-        sendButtonMessage(sender, "¿Que quieres hacer?", [["Empezar a chatear", "chatear"], ["Ir a la pagina web", "web"]])
+        sendButtonMessage(sender_id, "¿Que quieres hacer?", [["Empezar a chatear", "chatear"], ["Ir a la pagina web", "web"]])
 
     elif "chatear" in text:
-        sendImageMessage(sender, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkgQAxIYGfodDctizYg_auYhrJO4Jlcy1tGQbvNy9Brp-ZIpNXNQ")
+        sendImageMessage(sender_id, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkgQAxIYGfodDctizYg_auYhrJO4Jlcy1tGQbvNy9Brp-ZIpNXNQ")
 
     else:
-        sendText(sender, "Disculpa, no entiendo lo que dices")
+        sendText(sender_id, "Disculpa, no entiendo lo que dices")
 
 def sendButtonMessage(sender_id, text):
     message_data = {
