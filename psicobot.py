@@ -3,7 +3,7 @@ from flask import Flask, request
 import json
 import requests
 #from utils import wit_response
-from pymessenger import Bot
+#from pymessenger import Bot
 from os import environ
 
 app = Flask(__name__)
@@ -11,7 +11,6 @@ app = Flask(__name__)
 v_token = environ.get('FB_VERIFY_TOKEN')
 a_token = environ.get('FB_ACCESS_TOKEN')
 
-bot = Bot(a_token)
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -29,9 +28,7 @@ def webhook():
 
     # endpoint for processing incoming messaging events
     data = request.get_json()
-    log("+++++++++++++++++++++++++++++++++++++++++++++")
     log(data)  # you may not want to log every incoming message in production, but it's good for testing
-    log("+++++++++++++++++++++++++++++++++++++++++++++")
 
     if data['object'] == 'page':
         for entry in data['entry']:
@@ -55,8 +52,7 @@ def webhook():
 
                     sender_id = messaging_event["sender"]["id"]
                     message_text = messaging_event["postback"]["payload"]
-
-                    decideMessage(sender_id, message_text)
+                    sendText(sender_id, message_text)
 
     return "ok", 200
 
@@ -65,27 +61,13 @@ def decideMessage(sender_id, message_text):
     text = message_text.lower()
 
     if "start" in text:
-        buttons = [
-            {
-                "type":"postback",
-                "title": "Empezar a chatear",
-                "payload": "chatear"
-            },
-            {
-                "type":"postback",
-                "title": "Ir a la pagina web",
-                "payload": "web"
-            }  
-        ]
-
-        bot.send_button_message(sender_id, "¿Que quieres hacer?", buttons)
+        sendButtonMessage(sender_id, "¿Que quieres hacer?", [["Empezar a chatear", "chatear"], ["Ir a la pagina web", "web"]])
 
     elif "chatear" in text:
-        #sendImageMessage(sender_id, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkgQAxIYGfodDctizYg_auYhrJO4Jlcy1tGQbvNy9Brp-ZIpNXNQ")
-        bot.send_message(sender_id, "Disculpa, no entiendo lo que dices")
+        sendImageMessage(sender_id, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkgQAxIYGfodDctizYg_auYhrJO4Jlcy1tGQbvNy9Brp-ZIpNXNQ")
 
     else:
-        bot.send_message(sender_id, "Disculpa, no entiendo lo que dices")
+        sendText(sender_id, "Disculpa, no entiendo lo que dices")
 
 def sendButtonMessage(sender_id, text, options):
     message_data = {
