@@ -1,17 +1,16 @@
-import os
-import sys
-import json
-from os import environ
-import requests
+import os, sys
 from flask import Flask, request
-from datetime import datetime
+#from utils import wit_response
 from pymessenger import Bot
+from os import environ
 
 app = Flask(__name__)
+
 v_token = environ.get('FB_VERIFY_TOKEN')
 a_token = environ.get('FB_ACCESS_TOKEN')
 
 bot = Bot(a_token)
+
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -56,4 +55,5 @@ def log(message):
 
 
 if __name__ == "__main__":
-	app.run(debug = True, port = 80)
+	app.run(debug = True, port = 5000)
+
