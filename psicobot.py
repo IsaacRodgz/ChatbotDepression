@@ -70,7 +70,7 @@ def decideMessage(sender_id, message_text):
     else:
         sendText(sender_id, "Disculpa, no entiendo lo que dices")
 
-def sendButtonMessage(sender_id, text):
+def sendButtonMessage(sender_id, text, options):
     message_data = {
         "attachment":{
             "type":"template",
@@ -80,13 +80,13 @@ def sendButtonMessage(sender_id, text):
                 "buttons":[
                     {
                         "type":"postback",
-                        "title":"Si",
-                        "payload":"si"
+                        "title": options[0][0],
+                        "payload": options[0][1]
                     },
                     {
                         "type":"postback",
-                        "title":"No",
-                        "payload":"no"
+                        "title": options[1][0],
+                        "payload": options[1][1]
                     }
                 ]
             }
