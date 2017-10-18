@@ -4,8 +4,6 @@ a_token = "GBHEFO5FOU4ASTGLBXPVC6IHK5Y2BDWV"
 
 client = Wit(access_token = a_token)
 
-message_text = "Hola me llamo isaac"
-
 def wit_response(message_text):
     resp = client.message(message_text)
 
@@ -20,4 +18,6 @@ def wit_response(message_text):
         
     return (entity, value)
 
-#print(wit_response(message_text))
+while True:
+    message = str(input(">> "))
+    print(">> {0}".format(wit_response(message)))

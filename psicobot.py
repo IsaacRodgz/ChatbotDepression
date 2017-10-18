@@ -3,14 +3,18 @@ from flask import Flask, request
 import json
 import requests
 #from utils import wit_response
-#from pymessenger import Bot
+from pymessenger import Bot
 from os import environ
 
 app = Flask(__name__)
 
-v_token = environ.get('FB_VERIFY_TOKEN')
-a_token = environ.get('FB_ACCESS_TOKEN')
+#v_token = environ.get('FB_VERIFY_TOKEN')
+#a_token = environ.get('FB_ACCESS_TOKEN')
 
+v_token = "blondiebytes"
+a_token = "EAADZBqZBZC8rAIBAMFr6AfGjK6aml9o5N2l1FWyQwm4as7ZCZAKyAIehLplXAH6xUamUX2LBHfG97SHtAe9yeSR0qCb2an6GcFbmrbflkTZCYBkqf64ZALSma3xegly5MZAYWdUwZCY7MSTPXRovZAUVEicAjxHq4wXU4u0GtboM0LsAZDZD"
+
+bot = Bot(a_token)
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -28,31 +32,36 @@ def webhook():
 
     # endpoint for processing incoming messaging events
     data = request.get_json()
-    log(data)  # you may not want to log every incoming message in production, but it's good for testing
+    log(data)
+    log("\n")
 
     if data['object'] == 'page':
         for entry in data['entry']:
-            for messaging_event in entry['messaging']:
+            if entry.get("messaging"):
+                for messaging_event in entry['messaging']:
 
-                if messaging_event.get("message"):  # someone sent us a message
+                    sender_id = messaging_event["sender"]["id"] # FB ID of the person sending you the message
+                    recipient_id = messaging_event['recipient']['id'] # Chatbot ID
 
-                    sender_id = messaging_event['sender']['id']        # the facebook ID of the person sending you the message
-                    recipient_id = messaging_event['recipient']['id']  # the recipient's ID, which should be your page's facebook ID
-                    message_text = messaging_event['message']['text']  # the message's text
+                    # Text Message
+                    if messaging_event.get("message"):  # someone sent us a message
+                        if 'text' in messaging_event['message']:
+                            message_text = messaging_event['message']['text']  # the message's text
+                        else:
+                            message_text = "no text"
+                        decideMessage(sender_id, message_text)
 
-                    decideMessage(sender_id, message_text)
+                    # Button Answer
+                    elif messaging_event.get("postback"):  # user clicked/tapped "postback" button in earlier message
 
-                if messaging_event.get("delivery"):  # delivery confirmation
-                    pass
+                        message_text = messaging_event["postback"]["payload"] # Button answer text
+                        decideMessage(sender_id, message_text)
 
-                if messaging_event.get("optin"):  # optin confirmation
-                    pass
+                    elif messaging_event.get("delivery"):  # delivery confirmation
+                        pass
 
-                if messaging_event.get("postback"):  # user clicked/tapped "postback" button in earlier message
-
-                    sender_id = messaging_event["sender"]["id"]
-                    message_text = messaging_event["postback"]["payload"]
-                    sendText(sender_id, message_text)
+                    elif messaging_event.get("optin"):  # optin confirmation
+                        pass
 
     return "ok", 200
 
@@ -61,13 +70,27 @@ def decideMessage(sender_id, message_text):
     text = message_text.lower()
 
     if "start" in text:
-        sendButtonMessage(sender_id, "¿Que quieres hacer?", [["Empezar a chatear", "chatear"], ["Ir a la pagina web", "web"]])
+
+        buttons = [
+                    {
+                        "type":"postback",
+                        "title": "Empezar a chatear",
+                        "payload": "chatear"
+                    },
+                    {
+                        "type":"postback",
+                        "title": "Ir a la pagina web",
+                        "payload": "web"
+                    }
+        ]
+
+        bot.send_button_message(sender_id, "¿Que quieres hacer?", buttons)
 
     elif "chatear" in text:
-        sendImageMessage(sender_id, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkgQAxIYGfodDctizYg_auYhrJO4Jlcy1tGQbvNy9Brp-ZIpNXNQ")
+        bot.send_text_message(sender_id, ":D")
 
     else:
-        sendText(sender_id, "Disculpa, no entiendo lo que dices")
+        bot.send_text_message(sender_id, "Disculpa, no entiendo lo que dices")
 
 def sendButtonMessage(sender_id, text, options):
     message_data = {
@@ -107,12 +130,12 @@ def sendImageMessage(sender_id, imageURL):
 
     sendRequest(sender_id, message_data)
 
-def sendText(recipient_id, text):
+def sendText(sender_id, text):
     #log("sending message to {recipient}: {text}".format(recipient=recipient_id, text=message_text))
     
     message_data = {"text":text}
 
-    sendRequest(recipient_id, message_data)
+    sendRequest(sender_id, message_data)
 
 def sendRequest(recipient_id, text):
     params = {
