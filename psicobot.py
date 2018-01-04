@@ -12,7 +12,7 @@ app = Flask(__name__)
 #a_token = environ.get('FB_ACCESS_TOKEN')
 
 v_token = "blondiebytes"
-a_token = "EAADZBqZBZC8rAIBAMFr6AfGjK6aml9o5N2l1FWyQwm4as7ZCZAKyAIehLplXAH6xUamUX2LBHfG97SHtAe9yeSR0qCb2an6GcFbmrbflkTZCYBkqf64ZALSma3xegly5MZAYWdUwZCY7MSTPXRovZAUVEicAjxHq4wXU4u0GtboM0LsAZDZD"
+a_token = "EAADZBqZBZC8rAIBAPDztnVHeGZB7slQzZBZBiZBsZBl5XrCrlpJa6Oo5mQr0kfUBdci5LvVuOg9U1RhaHDLX9nkbQSigIDqcgnmGiY6KU2zeMZCZBPZBekdzgyaeUupy1fiUmTjwfHw0FFrzWADZBPYWmO3b3BZABmJ5J2BsJO7GQiDg23hvKfvOFdpjm"
 
 bot = Bot(a_token)
 
@@ -70,27 +70,42 @@ def decideMessage(sender_id, message_text):
     text = message_text.lower()
 
     if "start" in text:
+        
+        buttons = [
+                    {
+                        "type":"web_url",
+                        "url": "https://github.com/IsaacRodgz/ChatbotDepression/blob/master/README.md",
+                        "title":"Ir a consentimiento"
+                    }
+        ]
+
+        bot.send_button_message(sender_id, "Hola *user_name*, me llamo pumita :D. Me da mucho gusto que te intereses en tu bienestar. Para empezar, me gustaría que leas este consentimiento informado que habla acerca de lo que hacemos en pumabot por la salud ;)", buttons)
 
         buttons = [
                     {
                         "type":"postback",
-                        "title": "Empezar a chatear",
-                        "payload": "chatear"
+                        "title": "Si",
+                        "payload": "si_acepta_consentimiento"
                     },
                     {
                         "type":"postback",
-                        "title": "Ir a la pagina web",
-                        "payload": "web"
+                        "title": "No",
+                        "payload": "no_acepta_consentimiento"
                     }
         ]
 
-        bot.send_button_message(sender_id, "¿Que quieres hacer?", buttons)
+        bot.send_button_message(sender_id, "He leido y estoy de acuerdo con el consentimiento informado.", buttons)
 
-    elif "chatear" in text:
-        bot.send_text_message(sender_id, ":D")
+    elif "no_acepta_consentimiento" in text:
+        bot.send_text_message(sender_id, "Si cambias de opinión háblame de nuevo :)")
 
-    else:
-        bot.send_text_message(sender_id, "Disculpa, no entiendo lo que dices")
+    elif "si_acepta_consentimiento" in text:
+
+        bot.send_text_message(sender_id, "Muy bien *user_name* vamos a comenzar. ¿Qué frase describe mejor como te has sentido durante las últimas dos semanas, incluido el dia de hoy?. Empecemos con la tristeza.\n\n*Frase 1.* No me siento triste.\n*Frase 2.* Me siento triste la mayor parte del tiempo.\n*Frase 3.* Estoy triste todo el tiempo.\n*Frase 4.* Me siento tan triste y desgraciado que no puedo soportarlo.")
+
+    elif "2" or "3" or "4" in text:
+        bot.send_text_message(sender_id, "¿Me podrías decir lo más breve posible en qué circunstancias te sientes más triste?")
+        
 
 def sendButtonMessage(sender_id, text, options):
     message_data = {
