@@ -5,6 +5,7 @@ import requests
 #from utils import wit_response
 from pymessenger import Bot
 from os import environ
+import re
 
 app = Flask(__name__)
 
@@ -15,6 +16,9 @@ v_token = "blondiebytes"
 a_token = "EAADZBqZBZC8rAIBAPDztnVHeGZB7slQzZBZBiZBsZBl5XrCrlpJa6Oo5mQr0kfUBdci5LvVuOg9U1RhaHDLX9nkbQSigIDqcgnmGiY6KU2zeMZCZBPZBekdzgyaeUupy1fiUmTjwfHw0FFrzWADZBPYWmO3b3BZABmJ5J2BsJO7GQiDg23hvKfvOFdpjm"
 
 bot = Bot(a_token)
+
+respuestas = []
+consentimiento_accepted = False
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -47,9 +51,10 @@ def webhook():
                     if messaging_event.get("message"):  # someone sent us a message
                         if 'text' in messaging_event['message']:
                             message_text = messaging_event['message']['text']  # the message's text
+                            decideMessage(sender_id, message_text)
                         else:
                             message_text = "no text"
-                        decideMessage(sender_id, message_text)
+                        
 
                     # Button Answer
                     elif messaging_event.get("postback"):  # user clicked/tapped "postback" button in earlier message
@@ -101,11 +106,18 @@ def decideMessage(sender_id, message_text):
 
     elif "si_acepta_consentimiento" in text:
 
-        bot.send_text_message(sender_id, "Muy bien *user_name* vamos a comenzar. ¿Qué frase describe mejor como te has sentido durante las últimas dos semanas, incluido el dia de hoy?. Empecemos con la tristeza.\n\n*Frase 1.* No me siento triste.\n*Frase 2.* Me siento triste la mayor parte del tiempo.\n*Frase 3.* Estoy triste todo el tiempo.\n*Frase 4.* Me siento tan triste y desgraciado que no puedo soportarlo.")
+        bot.send_text_message(sender_id, "Muy bien *user_name* vamos a comenzar ;). ¿Qué frase describe mejor como te has sentido durante las últimas dos semanas, incluido el dia de hoy?. Empecemos con la tristeza.\n\n*Frase_a.* No me siento triste.\n*Frase_b.* Me siento triste la mayor parte del tiempo.\n*Frase_c.* Estoy triste todo el tiempo.\n*Frase_d.* Me siento tan triste y desgraciado que no puedo soportarlo.")
 
-    elif "2" or "3" or "4" in text:
-        bot.send_text_message(sender_id, "¿Me podrías decir lo más breve posible en qué circunstancias te sientes más triste?")
-        
+    elif re.search(r' [abcd]|^[abcd]', text) and "muy bien *user_name* vamos a comenzar ;)" not in text:
+        print("*****")        
+        print(text)
+        print("*****")
+        respuestas.append(text[text.index(re.search(r' [abcd]|^[abcd]', text).group(0))+1])
+
+    else:
+        bot.send_text_message(sender_id, "No entiendo lo que dices.")
+
+    print(respuestas)
 
 def sendButtonMessage(sender_id, text, options):
     message_data = {
