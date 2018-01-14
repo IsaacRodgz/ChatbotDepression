@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 import os, sys
 from flask import Flask, request
 import json
@@ -36,7 +38,9 @@ def webhook():
 
     # endpoint for processing incoming messaging events
     data = request.get_json()
+    print("$$$$$$$$$$$$$$$$$inside webhook$$$$$$$$$$$$$$$$$$$$$$")
     log(data)
+    print("$$$$$$$$$$$$$$$$$inside webhook$$$$$$$$$$$$$$$$$$$$$$")
     log("\n")
 
     if data['object'] == 'page':
@@ -48,14 +52,19 @@ def webhook():
                     recipient_id = messaging_event['recipient']['id'] # Chatbot ID
 
                     # Text Message
+                    # TODO: Chatbot must return a message
                     if messaging_event.get("message"):  # someone sent us a message
-                        if 'text' in messaging_event['message']:
+                        if messaging_event['message'].get('is_echo'):  # Discard text, it's just echoing sent messages to user
+                            pass
+                        elif messaging_event['message'].get('quick_reply'):
+                            message_text = messaging_event['message']['quick_reply']['payload']  # the message's text
+                            decideMessage(sender_id, message_text)
+                        elif 'text' in messaging_event['message']:
                             message_text = messaging_event['message']['text']  # the message's text
                             decideMessage(sender_id, message_text)
                         else:
                             message_text = "no text"
-                        
-
+                    
                     # Button Answer
                     elif messaging_event.get("postback"):  # user clicked/tapped "postback" button in earlier message
 
@@ -68,13 +77,18 @@ def webhook():
                     elif messaging_event.get("optin"):  # optin confirmation
                         pass
 
+
     return "ok", 200
 
 def decideMessage(sender_id, message_text):
 
     text = message_text.lower()
 
-    if "start" in text:
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    print(text)
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+
+    if "get_started_payload" == text:
         
         buttons = [
                     {
@@ -106,18 +120,44 @@ def decideMessage(sender_id, message_text):
 
     elif "si_acepta_consentimiento" in text:
 
-        bot.send_text_message(sender_id, "Muy bien *user_name* vamos a comenzar ;). ¿Qué frase describe mejor como te has sentido durante las últimas dos semanas, incluido el dia de hoy?. Empecemos con la tristeza.\n\n*Frase_a.* No me siento triste.\n*Frase_b.* Me siento triste la mayor parte del tiempo.\n*Frase_c.* Estoy triste todo el tiempo.\n*Frase_d.* Me siento tan triste y desgraciado que no puedo soportarlo.")
+        pregunta1 = "Muy bien *user_name* vamos a comenzar ;). ¿Qué frase describe mejor como te has sentido durante las últimas dos semanas, incluido el dia de hoy?. Empecemos con la tristeza.\n\n*A.* No me siento triste.\n*B.* Me siento triste la mayor parte del tiempo.\n*C.* Estoy triste todo el tiempo.\n*D.* Me siento tan triste y desgraciado que no puedo soportarlo."
 
-    elif re.search(r' [abcd]|^[abcd]', text) and "muy bien *user_name* vamos a comenzar ;)" not in text:
-        print("*****")        
-        print(text)
-        print("*****")
-        respuestas.append(text[text.index(re.search(r' [abcd]|^[abcd]', text).group(0))+1])
+        buttons = [
+            {
+                "content_type":"text",
+                "title":"A",
+                "payload":"1_a"
+            },
+            {
+                "content_type":"text",
+                "title":"B",
+                "payload":"1_b"
+            },
+            {
+                "content_type":"text",
+                "title":"C",
+                "payload":"1_c"
+            },
+            {
+                "content_type":"text",
+                "title":"D",
+                "payload":"1_d"
+            }
+        ]
+
+        send_quick_reply(sender_id, pregunta1, buttons)
+
+    elif re.search(r'^[0-9]+\_[abcdefghij]$', text):
+        respuestas.append(text)
+        if len(respuestas) == 1:
+            bot.send_text_message(sender_id, "Gracias por responder la pregunta 1. Tu respuesta fue: "+text)
 
     else:
         bot.send_text_message(sender_id, "No entiendo lo que dices.")
 
+    print("%%%%%%%%%%%%%%%%")
     print(respuestas)
+    print("%%%%%%%%%%%%%%%%")
 
 def sendButtonMessage(sender_id, text, options):
     message_data = {
@@ -154,6 +194,20 @@ def sendImageMessage(sender_id, imageURL):
             }
         }
     }
+
+    sendRequest(sender_id, message_data)
+
+def send_quick_reply(sender_id, text, buttons):
+    message_data = {
+            "text": text,
+            "quick_replies":
+            [
+                
+            ]
+    }
+
+    for button in buttons:
+        message_data['quick_replies'].append(button)
 
     sendRequest(sender_id, message_data)
 
