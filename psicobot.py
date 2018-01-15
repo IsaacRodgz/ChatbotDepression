@@ -120,7 +120,7 @@ def decideMessage(sender_id, message_text):
 
     elif "si_acepta_consentimiento" in text:
 
-        pregunta1 = "Muy bien *user_name* vamos a comenzar ;). ¿Qué frase describe mejor como te has sentido durante las últimas dos semanas, incluido el dia de hoy?. Empecemos con la tristeza.\n\n*A.* No me siento triste.\n*B.* Me siento triste la mayor parte del tiempo.\n*C.* Estoy triste todo el tiempo.\n*D.* Me siento tan triste y desgraciado que no puedo soportarlo."
+        pregunta1 = "Muy bien *user_name* vamos a comenzar ;). ¿Qué frase describe mejor como te has sentido durante las últimas dos semanas, incluido el dia de hoy?. Te molestaron cosas que usualmente no te molestan.\n\n*A.* Raramente o ninguna vez (Menos de un día).\n*B.* Alguna o pocas veces (1-2 días).\n*C.* Ocasionalmente o una buena parte del tiempo (3-4 días).\n*D.* La mayor parte o todo el tiempo (5-7 días)."
 
         buttons = [
             {
@@ -151,6 +151,277 @@ def decideMessage(sender_id, message_text):
         respuestas.append(text)
         if len(respuestas) == 1:
             bot.send_text_message(sender_id, "Gracias por responder la pregunta 1. Tu respuesta fue: "+text)
+
+            pregunta2 = "No te sentiste con ganas de comer.\n\n*A.* Raramente o ninguna vez (Menos de un día).\n*B.* Alguna o pocas veces (1-2 días).\n*C.* Ocasionalmente o una buena parte del tiempo (3-4 días).\n*D.* La mayor parte o todo el tiempo (5-7 días)."
+
+            buttons = [
+                {
+                    "content_type":"text",
+                    "title":"A",
+                    "payload":"2_a"
+                },
+                {
+                    "content_type":"text",
+                    "title":"B",
+                    "payload":"2_b"
+                },
+                {
+                    "content_type":"text",
+                    "title":"C",
+                    "payload":"2_c"
+                },
+                {
+                    "content_type":"text",
+                    "title":"D",
+                    "payload":"2_d"
+                }
+            ]
+            
+            send_quick_reply(sender_id, pregunta2, buttons)
+
+
+        elif len(respuestas) == 2:
+            bot.send_text_message(sender_id, "Gracias por responder la pregunta 2. Tu respuesta fue: "+text)
+
+            pregunta3 = "Sentías que no podías quitarte de encima la tristeza aún con la ayuda de tu familia o amigos.\n\n*A.* Raramente o ninguna vez (Menos de un día).\n*B.* Alguna o pocas veces (1-2 días).\n*C.* Ocasionalmente o una buena parte del tiempo (3-4 días).\n*D.* La mayor parte o todo el tiempo (5-7 días)."
+
+            buttons = [
+                {
+                    "content_type":"text",
+                    "title":"A",
+                    "payload":"3_a"
+                },
+                {
+                    "content_type":"text",
+                    "title":"B",
+                    "payload":"3_b"
+                },
+                {
+                    "content_type":"text",
+                    "title":"C",
+                    "payload":"3_c"
+                },
+                {
+                    "content_type":"text",
+                    "title":"D",
+                    "payload":"3_d"
+                }
+            ]
+
+            send_quick_reply(sender_id, pregunta3, buttons)
+
+        elif len(respuestas) == 3:
+            bot.send_text_message(sender_id, "Gracias por responder la pregunta 3. Tu respuesta fue: "+text)
+
+            pregunta4 = "Sentías que eras tan buena/bueno como cualquier otra persona.\n\n*A.* Raramente o ninguna vez (Menos de un día).\n*B.* Alguna o pocas veces (1-2 días).\n*C.* Ocasionalmente o una buena parte del tiempo (3-4 días).\n*D.* La mayor parte o todo el tiempo (5-7 días)."
+
+            buttons = [
+                {
+                    "content_type":"text",
+                    "title":"A",
+                    "payload":"4_a"
+                },
+                {
+                    "content_type":"text",
+                    "title":"B",
+                    "payload":"4_b"
+                },
+                {
+                    "content_type":"text",
+                    "title":"C",
+                    "payload":"4_c"
+                },
+                {
+                    "content_type":"text",
+                    "title":"D",
+                    "payload":"4_d"
+                }
+            ]
+
+            send_quick_reply(sender_id, pregunta4, buttons)
+
+        elif len(respuestas) == 4:
+            bot.send_text_message(sender_id, "Gracias por responder la pregunta 4. Tu respuesta fue: "+text)
+
+            pregunta5 = "Tenías dificultad en mantener tu mente en lo que estabas haciendo.\n\n*A.* Raramente o ninguna vez (Menos de un día).\n*B.* Alguna o pocas veces (1-2 días).\n*C.* Ocasionalmente o una buena parte del tiempo (3-4 días).\n*D.* La mayor parte o todo el tiempo (5-7 días)."
+
+            buttons = [
+                {
+                    "content_type":"text",
+                    "title":"A",
+                    "payload":"5_a"
+                },
+                {
+                    "content_type":"text",
+                    "title":"B",
+                    "payload":"5_b"
+                },
+                {
+                    "content_type":"text",
+                    "title":"C",
+                    "payload":"5_c"
+                },
+                {
+                    "content_type":"text",
+                    "title":"D",
+                    "payload":"5_d"
+                }
+            ]
+
+            send_quick_reply(sender_id, pregunta5, buttons)
+
+        elif len(respuestas) == 5:
+            bot.send_text_message(sender_id, "Gracias por responder la pregunta 5. Tu respuesta fue: "+text)
+
+            pregunta6 = "Te sentías deprimida/deprimido.\n\n*A.* Raramente o ninguna vez (Menos de un día).\n*B.* Alguna o pocas veces (1-2 días).\n*C.* Ocasionalmente o una buena parte del tiempo (3-4 días).\n*D.* La mayor parte o todo el tiempo (5-7 días)."
+
+            buttons = [
+                {
+                    "content_type":"text",
+                    "title":"A",
+                    "payload":"6_a"
+                },
+                {
+                    "content_type":"text",
+                    "title":"B",
+                    "payload":"6_b"
+                },
+                {
+                    "content_type":"text",
+                    "title":"C",
+                    "payload":"6_c"
+                },
+                {
+                    "content_type":"text",
+                    "title":"D",
+                    "payload":"6_d"
+                }
+            ]
+
+            send_quick_reply(sender_id, pregunta6, buttons)
+
+        elif len(respuestas) == 6:
+            bot.send_text_message(sender_id, "Gracias por responder la pregunta 6. Tu respuesta fue: "+text)
+
+            pregunta7 = "Sentías que todo lo que hacías era un esfuerzo.\n\n*A.* Raramente o ninguna vez (Menos de un día).\n*B.* Alguna o pocas veces (1-2 días).\n*C.* Ocasionalmente o una buena parte del tiempo (3-4 días).\n*D.* La mayor parte o todo el tiempo (5-7 días)."
+
+            buttons = [
+                {
+                    "content_type":"text",
+                    "title":"A",
+                    "payload":"7_a"
+                },
+                {
+                    "content_type":"text",
+                    "title":"B",
+                    "payload":"7_b"
+                },
+                {
+                    "content_type":"text",
+                    "title":"C",
+                    "payload":"7_c"
+                },
+                {
+                    "content_type":"text",
+                    "title":"D",
+                    "payload":"7_d"
+                }
+            ]
+
+            send_quick_reply(sender_id, pregunta7, buttons)
+
+        elif len(respuestas) == 7:
+            bot.send_text_message(sender_id, "Gracias por responder la pregunta 7. Tu respuesta fue: "+text)
+
+            pregunta8 = "Te sentías optimista sobre el futuro.\n\n*A.* Raramente o ninguna vez (Menos de un día).\n*B.* Alguna o pocas veces (1-2 días).\n*C.* Ocasionalmente o una buena parte del tiempo (3-4 días).\n*D.* La mayor parte o todo el tiempo (5-7 días)."
+
+            buttons = [
+                {
+                    "content_type":"text",
+                    "title":"A",
+                    "payload":"8_a"
+                },
+                {
+                    "content_type":"text",
+                    "title":"B",
+                    "payload":"8_b"
+                },
+                {
+                    "content_type":"text",
+                    "title":"C",
+                    "payload":"8_c"
+                },
+                {
+                    "content_type":"text",
+                    "title":"D",
+                    "payload":"8_d"
+                }
+            ]
+
+            send_quick_reply(sender_id, pregunta8, buttons)
+
+        elif len(respuestas) == 8:
+            bot.send_text_message(sender_id, "Gracias por responder la pregunta 8. Tu respuesta fue: "+text)
+
+            pregunta9 = "Pensaste que tu vida había sido un fracaso.\n\n*A.* Raramente o ninguna vez (Menos de un día).\n*B.* Alguna o pocas veces (1-2 días).\n*C.* Ocasionalmente o una buena parte del tiempo (3-4 días).\n*D.* La mayor parte o todo el tiempo (5-7 días)."
+
+            buttons = [
+                {
+                    "content_type":"text",
+                    "title":"A",
+                    "payload":"9_a"
+                },
+                {
+                    "content_type":"text",
+                    "title":"B",
+                    "payload":"9_b"
+                },
+                {
+                    "content_type":"text",
+                    "title":"C",
+                    "payload":"9_c"
+                },
+                {
+                    "content_type":"text",
+                    "title":"D",
+                    "payload":"9_d"
+                }
+            ]
+
+            send_quick_reply(sender_id, pregunta9, buttons)
+
+        elif len(respuestas) == 9:
+            bot.send_text_message(sender_id, "Gracias por responder la pregunta 9. Tu respuesta fue: "+text)
+
+            pregunta10 = "Te sentías con miedo.\n\n*A.* Raramente o ninguna vez (Menos de un día).\n*B.* Alguna o pocas veces (1-2 días).\n*C.* Ocasionalmente o una buena parte del tiempo (3-4 días).\n*D.* La mayor parte o todo el tiempo (5-7 días)."
+
+            buttons = [
+                {
+                    "content_type":"text",
+                    "title":"A",
+                    "payload":"10_a"
+                },
+                {
+                    "content_type":"text",
+                    "title":"B",
+                    "payload":"10_b"
+                },
+                {
+                    "content_type":"text",
+                    "title":"C",
+                    "payload":"10_c"
+                },
+                {
+                    "content_type":"text",
+                    "title":"D",
+                    "payload":"10_d"
+                }
+            ]
+
+            send_quick_reply(sender_id, pregunta10, buttons)
+
+        elif len(respuestas) == 10:
+            bot.send_text_message(sender_id, "Gracias por responder la pregunta 10. Tu respuesta fue: "+text)
 
     else:
         bot.send_text_message(sender_id, "No entiendo lo que dices.")
