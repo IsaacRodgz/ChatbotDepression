@@ -20,6 +20,7 @@ a_token = "EAADZBqZBZC8rAIBAPDztnVHeGZB7slQzZBZBiZBsZBl5XrCrlpJa6Oo5mQr0kfUBdci5
 bot = Bot(a_token)
 
 respuestas = []
+names = {}
 consentimiento_accepted = False
 
 @app.route('/', methods=['GET'])
@@ -52,7 +53,7 @@ def webhook():
                     recipient_id = messaging_event['recipient']['id'] # Chatbot ID
 
                     # Text Message
-                    # TODO: Chatbot must return a message
+                    # TODO: Chatbot must return a message with NLP
                     if messaging_event.get("message"):  # someone sent us a message
                         if messaging_event['message'].get('is_echo'):  # Discard text, it's just echoing sent messages to user
                             pass
@@ -84,7 +85,21 @@ def decideMessage(sender_id, message_text):
 
     text = message_text.lower()
 
+    if sender_id not in names:
+
+        print("Adding new name....")
+
+        # Get user info. requests.get returns string with the info
+        r = requests.get("https://graph.facebook.com/v2.6/1492366360818359?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token="+a_token).text
+        
+        # Convert string to dict
+        r = json.loads(r)
+
+        # Get user first_name and last_name
+        names[sender_id] = (r["first_name"], r["last_name"])
+
     print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    print(names[sender_id][0])
     print(text)
     print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 
@@ -97,8 +112,9 @@ def decideMessage(sender_id, message_text):
                         "title":"Ir a consentimiento"
                     }
         ]
-
-        bot.send_button_message(sender_id, "Hola *user_name*, me llamo pumita :D. Me da mucho gusto que te intereses en tu bienestar. Para empezar, me gustaría que leas este consentimiento informado que habla acerca de lo que hacemos en pumabot por la salud ;)", buttons)
+        
+        sendTyping(sender_id)
+        bot.send_button_message(sender_id, "Hola *"+names[sender_id][0]+"*, me llamo pumita :D. Me da mucho gusto que te intereses en tu bienestar. Para empezar, me gustaría que leas este consentimiento informado que habla acerca de lo que hacemos en pumabot por la salud ;)", buttons)
 
         buttons = [
                     {
@@ -113,14 +129,16 @@ def decideMessage(sender_id, message_text):
                     }
         ]
 
+        sendTyping(sender_id)
         bot.send_button_message(sender_id, "He leido y estoy de acuerdo con el consentimiento informado.", buttons)
 
     elif "no_acepta_consentimiento" in text:
+        sendTyping(sender_id)
         bot.send_text_message(sender_id, "Si cambias de opinión háblame de nuevo :)")
 
     elif "si_acepta_consentimiento" in text:
 
-        pregunta1 = "Muy bien *user_name* vamos a comenzar ;). ¿Qué frase describe mejor como te has sentido durante las últimas dos semanas, incluido el dia de hoy?. Te molestaron cosas que usualmente no te molestan.\n\n*A.* Raramente o ninguna vez (Menos de un día).\n*B.* Alguna o pocas veces (1-2 días).\n*C.* Ocasionalmente o una buena parte del tiempo (3-4 días).\n*D.* La mayor parte o todo el tiempo (5-7 días)."
+        pregunta1 = "Muy bien *"+names[sender_id][0]+"* vamos a comenzar ;). ¿Qué frase describe mejor como te has sentido durante las últimas dos semanas, incluido el dia de hoy?. Te molestaron cosas que usualmente no te molestan.\n\n*A.* Raramente o ninguna vez (Menos de un día).\n*B.* Alguna o pocas veces (1-2 días).\n*C.* Ocasionalmente o una buena parte del tiempo (3-4 días).\n*D.* La mayor parte o todo el tiempo (5-7 días)."
 
         buttons = [
             {
@@ -145,6 +163,7 @@ def decideMessage(sender_id, message_text):
             }
         ]
 
+        sendTyping(sender_id)
         send_quick_reply(sender_id, pregunta1, buttons)
 
     elif re.search(r'^[0-9]+\_[abcdefghij]$', text):
@@ -177,6 +196,7 @@ def decideMessage(sender_id, message_text):
                 }
             ]
             
+            sendTyping(sender_id)
             send_quick_reply(sender_id, pregunta2, buttons)
 
 
@@ -208,6 +228,7 @@ def decideMessage(sender_id, message_text):
                 }
             ]
 
+            sendTyping(sender_id)
             send_quick_reply(sender_id, pregunta3, buttons)
 
         elif len(respuestas) == 3:
@@ -238,6 +259,7 @@ def decideMessage(sender_id, message_text):
                 }
             ]
 
+            sendTyping(sender_id)
             send_quick_reply(sender_id, pregunta4, buttons)
 
         elif len(respuestas) == 4:
@@ -268,6 +290,7 @@ def decideMessage(sender_id, message_text):
                 }
             ]
 
+            sendTyping(sender_id)
             send_quick_reply(sender_id, pregunta5, buttons)
 
         elif len(respuestas) == 5:
@@ -298,6 +321,7 @@ def decideMessage(sender_id, message_text):
                 }
             ]
 
+            sendTyping(sender_id)
             send_quick_reply(sender_id, pregunta6, buttons)
 
         elif len(respuestas) == 6:
@@ -328,6 +352,7 @@ def decideMessage(sender_id, message_text):
                 }
             ]
 
+            sendTyping(sender_id)
             send_quick_reply(sender_id, pregunta7, buttons)
 
         elif len(respuestas) == 7:
@@ -358,6 +383,7 @@ def decideMessage(sender_id, message_text):
                 }
             ]
 
+            sendTyping(sender_id)
             send_quick_reply(sender_id, pregunta8, buttons)
 
         elif len(respuestas) == 8:
@@ -388,6 +414,7 @@ def decideMessage(sender_id, message_text):
                 }
             ]
 
+            sendTyping(sender_id)
             send_quick_reply(sender_id, pregunta9, buttons)
 
         elif len(respuestas) == 9:
@@ -418,12 +445,15 @@ def decideMessage(sender_id, message_text):
                 }
             ]
 
+            sendTyping(sender_id)
             send_quick_reply(sender_id, pregunta10, buttons)
 
         elif len(respuestas) == 10:
+            sendTyping(sender_id)
             bot.send_text_message(sender_id, "Gracias por responder la pregunta 10. Tu respuesta fue: "+text)
 
     else:
+        sendTyping(sender_id)
         bot.send_text_message(sender_id, "No entiendo lo que dices.")
 
     print("%%%%%%%%%%%%%%%%")
@@ -501,6 +531,25 @@ def sendRequest(recipient_id, text):
             "id": recipient_id
         },
         "message": text
+    })
+    r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, data=data)
+    if r.status_code != 200:
+        log("Eror :c")
+        log(r.status_code)
+        log(r.text)
+
+def sendTyping(recipient_id):
+    params = {
+        "access_token": a_token
+    }
+    headers = {
+        "Content-Type": "application/json"
+    }
+    data = json.dumps({
+        "recipient": {
+            "id": recipient_id
+        },
+        "sender_action":"typing_on"
     })
     r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, data=data)
     if r.status_code != 200:
