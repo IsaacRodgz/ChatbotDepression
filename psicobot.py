@@ -104,127 +104,165 @@ def decideMessage(sender_id, message_text):
     print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 
     if "get_started_payload" == text:
-        
-        buttons = [
-                    {
-                        "type":"web_url",
-                        "url": "https://github.com/IsaacRodgz/ChatbotDepression/blob/master/README.md",
-                        "title":"Ir a consentimiento"
-                    }
-        ]
-        
-        sendTyping(sender_id)
-        bot.send_button_message(sender_id, "Hola *"+names[sender_id][0]+"*, me llamo pumita :D. Me da mucho gusto que te intereses en tu bienestar. Para empezar, me gustaría que leas este consentimiento informado que habla acerca de lo que hacemos en pumabot por la salud ;)", buttons)
+
+        welcome_text = "Hola "+names[sender_id][0]+", me llamo pumita :D. Me da mucho gusto que te intereses en tu bienestar. Dado que soy un robot, la manera en que nos podremos comunicar es por medio de botones, ¿Los puedes ver?"
 
         buttons = [
                     {
-                        "type":"postback",
+                        "content_type":"text",
                         "title": "Si",
-                        "payload": "si_acepta_consentimiento"
+                        "payload": "si_ve_botones"
                     },
                     {
-                        "type":"postback",
+                        "content_type":"text",
                         "title": "No",
-                        "payload": "no_acepta_consentimiento"
+                        "payload": "no_ve_botones"
                     }
         ]
 
         sendTyping(sender_id)
-        bot.send_button_message(sender_id, "He leido y estoy de acuerdo con el consentimiento informado.", buttons)
+        send_quick_reply(sender_id, welcome_text, buttons)
 
-    elif "no_acepta_consentimiento" in text:
+    elif "si_ve_botones" in text:
         sendTyping(sender_id)
-        bot.send_text_message(sender_id, "Si cambias de opinión háblame de nuevo :)")
-
-    elif "si_acepta_consentimiento" in text:
-
-        pregunta1 = "Muy bien *"+names[sender_id][0]+"* vamos a comenzar ;). ¿Qué frase describe mejor como te has sentido durante las últimas dos semanas, incluido el dia de hoy?. Te molestaron cosas que usualmente no te molestan.\n\n*A.* Raramente o ninguna vez (Menos de un día).\n*B.* Alguna o pocas veces (1-2 días).\n*C.* Ocasionalmente o una buena parte del tiempo (3-4 días).\n*D.* La mayor parte o todo el tiempo (5-7 días)."
+        bot.send_text_message(sender_id, "Perfecto "+names[sender_id][0]+" vamos a comenzar")
+        sendImageMessage(sender_id, "https://i.imgur.com/P785top.jpg")
 
         buttons = [
             {
                 "content_type":"text",
-                "title":"A",
+                "title":"¡Listo!",
+                "payload":"go_adelante"
+            }
+        ]
+
+        sendTyping(sender_id)
+        send_quick_reply(sender_id, "¿Estás listo? Te aplicaré un test, esto será muy breve.", buttons)
+
+    elif "no_ve_botones" in text:
+        sendTyping(sender_id)
+        bot.send_text_message("Por favor comunícale la situación al instructor")
+
+    elif "go_adelante" in text:
+
+        sendTyping(sender_id)
+        bot.send_text_message(sender_id, "Por favor selecciona el botón que contenga la letra que represente su estado actual o el estado con el que mejor se identifique")
+
+        sendTyping(sender_id)
+        pregunta1 = "\n1. Me he divertido mucho durante las últimas dos semanas.\n\n"
+
+        buttons = [
+            {
+                "content_type":"text",
+                "title":"Nunca",
                 "payload":"1_a"
             },
             {
                 "content_type":"text",
-                "title":"B",
+                "title":"De vez en cuando",
                 "payload":"1_b"
             },
             {
                 "content_type":"text",
-                "title":"C",
+                "title":"Usualmente",
                 "payload":"1_c"
             },
             {
                 "content_type":"text",
-                "title":"D",
+                "title":"Muy a menudo",
                 "payload":"1_d"
+            },
+            {
+                "content_type":"text",
+                "title":"Siempre",
+                "payload":"1_e"
             }
         ]
 
         sendTyping(sender_id)
         send_quick_reply(sender_id, pregunta1, buttons)
 
+    elif "no_acepta_consentimiento" in text:
+        sendTyping(sender_id)
+        bot.send_text_message(sender_id, "Si cambias de opinión háblame de nuevo :)")
+
+    elif "si_acepta_consentimiento" in text:
+        sendTyping(sender_id)
+        bot.send_text_message(sender_id, "Si cambias de opinión háblame de nuevo :)")
+
     elif re.search(r'^[0-9]+\_[abcdefghij]$', text):
         respuestas.append(text)
         if len(respuestas) == 1:
-            bot.send_text_message(sender_id, "Gracias por responder la pregunta 1. Tu respuesta fue: "+text)
+            sendTyping(sender_id)
+            bot.send_text_message(sender_id, "Muy bien, he guardado tu respuesta, continuemos.")
+            sendImageMessage(sender_id, "https://i.imgur.com/Cn57NXT.jpg")
 
-            pregunta2 = "No te sentiste con ganas de comer.\n\n*A.* Raramente o ninguna vez (Menos de un día).\n*B.* Alguna o pocas veces (1-2 días).\n*C.* Ocasionalmente o una buena parte del tiempo (3-4 días).\n*D.* La mayor parte o todo el tiempo (5-7 días)."
+            #bot.send_text_message(sender_id, "Gracias por responder la pregunta 1.")
+
+            pregunta2 = "2. Disfruto del sexo.\n\n"
 
             buttons = [
                 {
                     "content_type":"text",
-                    "title":"A",
+                    "title":"Nunca",
                     "payload":"2_a"
                 },
                 {
                     "content_type":"text",
-                    "title":"B",
+                    "title":"De vez en cuando",
                     "payload":"2_b"
                 },
                 {
                     "content_type":"text",
-                    "title":"C",
+                    "title":"Usualmente",
                     "payload":"2_c"
                 },
                 {
                     "content_type":"text",
-                    "title":"D",
+                    "title":"Muy a menudo",
                     "payload":"2_d"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Siempre",
+                    "payload":"2_e"
                 }
             ]
-            
+
             sendTyping(sender_id)
             send_quick_reply(sender_id, pregunta2, buttons)
 
-
         elif len(respuestas) == 2:
-            bot.send_text_message(sender_id, "Gracias por responder la pregunta 2. Tu respuesta fue: "+text)
+            sendTyping(sender_id)
+            #bot.send_text_message(sender_id, "Gracias por responder la pregunta 2.")
 
-            pregunta3 = "Sentías que no podías quitarte de encima la tristeza aún con la ayuda de tu familia o amigos.\n\n*A.* Raramente o ninguna vez (Menos de un día).\n*B.* Alguna o pocas veces (1-2 días).\n*C.* Ocasionalmente o una buena parte del tiempo (3-4 días).\n*D.* La mayor parte o todo el tiempo (5-7 días)."
+            pregunta3 = "3. Estoy satisfecho con mi vida\n\n"
 
             buttons = [
                 {
                     "content_type":"text",
-                    "title":"A",
+                    "title":"Nunca",
                     "payload":"3_a"
                 },
                 {
                     "content_type":"text",
-                    "title":"B",
+                    "title":"De vez en cuando",
                     "payload":"3_b"
                 },
                 {
                     "content_type":"text",
-                    "title":"C",
+                    "title":"Usualmente",
                     "payload":"3_c"
                 },
                 {
                     "content_type":"text",
-                    "title":"D",
+                    "title":"Muy a menudo",
                     "payload":"3_d"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Siempre",
+                    "payload":"3_e"
                 }
             ]
 
@@ -232,30 +270,36 @@ def decideMessage(sender_id, message_text):
             send_quick_reply(sender_id, pregunta3, buttons)
 
         elif len(respuestas) == 3:
-            bot.send_text_message(sender_id, "Gracias por responder la pregunta 3. Tu respuesta fue: "+text)
+            sendTyping(sender_id)
+            #bot.send_text_message(sender_id, "Gracias por responder la pregunta 3. Tu respuesta fue: "+text)
 
-            pregunta4 = "Sentías que eras tan buena/bueno como cualquier otra persona.\n\n*A.* Raramente o ninguna vez (Menos de un día).\n*B.* Alguna o pocas veces (1-2 días).\n*C.* Ocasionalmente o una buena parte del tiempo (3-4 días).\n*D.* La mayor parte o todo el tiempo (5-7 días)."
+            pregunta4 = "4. Disfruto de la vida."
 
             buttons = [
                 {
                     "content_type":"text",
-                    "title":"A",
+                    "title":"Nunca",
                     "payload":"4_a"
                 },
                 {
                     "content_type":"text",
-                    "title":"B",
+                    "title":"De vez en cuando",
                     "payload":"4_b"
                 },
                 {
                     "content_type":"text",
-                    "title":"C",
+                    "title":"Usualmente",
                     "payload":"4_c"
                 },
                 {
                     "content_type":"text",
-                    "title":"D",
+                    "title":"Muy a menudo",
                     "payload":"4_d"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Siempre",
+                    "payload":"4_e"
                 }
             ]
 
@@ -263,30 +307,36 @@ def decideMessage(sender_id, message_text):
             send_quick_reply(sender_id, pregunta4, buttons)
 
         elif len(respuestas) == 4:
-            bot.send_text_message(sender_id, "Gracias por responder la pregunta 4. Tu respuesta fue: "+text)
+            sendTyping(sender_id)
+            #bot.send_text_message(sender_id, "Gracias por responder la pregunta 4. Tu respuesta fue: "+text)
 
-            pregunta5 = "Tenías dificultad en mantener tu mente en lo que estabas haciendo.\n\n*A.* Raramente o ninguna vez (Menos de un día).\n*B.* Alguna o pocas veces (1-2 días).\n*C.* Ocasionalmente o una buena parte del tiempo (3-4 días).\n*D.* La mayor parte o todo el tiempo (5-7 días)."
+            pregunta5 = "5. Pienso que mi vida ha sido un fracaso."
 
             buttons = [
                 {
                     "content_type":"text",
-                    "title":"A",
+                    "title":"Nunca",
                     "payload":"5_a"
                 },
                 {
                     "content_type":"text",
-                    "title":"B",
+                    "title":"De vez en cuando",
                     "payload":"5_b"
                 },
                 {
                     "content_type":"text",
-                    "title":"C",
+                    "title":"Usualmente",
                     "payload":"5_c"
                 },
                 {
                     "content_type":"text",
-                    "title":"D",
+                    "title":"Muy a menudo",
                     "payload":"5_d"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Siempre",
+                    "payload":"5_e"
                 }
             ]
 
@@ -294,30 +344,36 @@ def decideMessage(sender_id, message_text):
             send_quick_reply(sender_id, pregunta5, buttons)
 
         elif len(respuestas) == 5:
-            bot.send_text_message(sender_id, "Gracias por responder la pregunta 5. Tu respuesta fue: "+text)
+            sendTyping(sender_id)
+            #bot.send_text_message(sender_id, "Gracias por responder la pregunta 5. Tu respuesta fue: "+text)
 
-            pregunta6 = "Te sentías deprimida/deprimido.\n\n*A.* Raramente o ninguna vez (Menos de un día).\n*B.* Alguna o pocas veces (1-2 días).\n*C.* Ocasionalmente o una buena parte del tiempo (3-4 días).\n*D.* La mayor parte o todo el tiempo (5-7 días)."
+            pregunta6 = "6. Siento que he sido mala persona."
 
             buttons = [
                 {
                     "content_type":"text",
-                    "title":"A",
+                    "title":"Nunca",
                     "payload":"6_a"
                 },
                 {
                     "content_type":"text",
-                    "title":"B",
+                    "title":"De vez en cuando",
                     "payload":"6_b"
                 },
                 {
                     "content_type":"text",
-                    "title":"C",
+                    "title":"Usualmente",
                     "payload":"6_c"
                 },
                 {
                     "content_type":"text",
-                    "title":"D",
+                    "title":"Muy a menudo",
                     "payload":"6_d"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Siempre",
+                    "payload":"6_e"
                 }
             ]
 
@@ -325,30 +381,36 @@ def decideMessage(sender_id, message_text):
             send_quick_reply(sender_id, pregunta6, buttons)
 
         elif len(respuestas) == 6:
-            bot.send_text_message(sender_id, "Gracias por responder la pregunta 6. Tu respuesta fue: "+text)
+            sendTyping(sender_id)
+            #bot.send_text_message(sender_id, "Gracias por responder la pregunta 6. Tu respuesta fue: "+text)
 
-            pregunta7 = "Sentías que todo lo que hacías era un esfuerzo.\n\n*A.* Raramente o ninguna vez (Menos de un día).\n*B.* Alguna o pocas veces (1-2 días).\n*C.* Ocasionalmente o una buena parte del tiempo (3-4 días).\n*D.* La mayor parte o todo el tiempo (5-7 días)."
+            pregunta7 = "7. Duermo sin descansar."
 
             buttons = [
                 {
                     "content_type":"text",
-                    "title":"A",
+                    "title":"Nunca",
                     "payload":"7_a"
                 },
                 {
                     "content_type":"text",
-                    "title":"B",
+                    "title":"De vez en cuando",
                     "payload":"7_b"
                 },
                 {
                     "content_type":"text",
-                    "title":"C",
+                    "title":"Usualmente",
                     "payload":"7_c"
                 },
                 {
                     "content_type":"text",
-                    "title":"D",
+                    "title":"Muy a menudo",
                     "payload":"7_d"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Siempre",
+                    "payload":"7_e"
                 }
             ]
 
@@ -356,30 +418,36 @@ def decideMessage(sender_id, message_text):
             send_quick_reply(sender_id, pregunta7, buttons)
 
         elif len(respuestas) == 7:
-            bot.send_text_message(sender_id, "Gracias por responder la pregunta 7. Tu respuesta fue: "+text)
+            sendTyping(sender_id)
+            #bot.send_text_message(sender_id, "Gracias por responder la pregunta 7. Tu respuesta fue: "+text)
 
-            pregunta8 = "Te sentías optimista sobre el futuro.\n\n*A.* Raramente o ninguna vez (Menos de un día).\n*B.* Alguna o pocas veces (1-2 días).\n*C.* Ocasionalmente o una buena parte del tiempo (3-4 días).\n*D.* La mayor parte o todo el tiempo (5-7 días)."
+            pregunta8 = "8. Me siento cansado todo el tiempo."
 
             buttons = [
                 {
                     "content_type":"text",
-                    "title":"A",
+                    "title":"Nunca",
                     "payload":"8_a"
                 },
                 {
                     "content_type":"text",
-                    "title":"B",
+                    "title":"De vez en cuando",
                     "payload":"8_b"
                 },
                 {
                     "content_type":"text",
-                    "title":"C",
+                    "title":"Usualmente",
                     "payload":"8_c"
                 },
                 {
                     "content_type":"text",
-                    "title":"D",
+                    "title":"Muy a menudo",
                     "payload":"8_d"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Siempre",
+                    "payload":"8_e"
                 }
             ]
 
@@ -387,30 +455,38 @@ def decideMessage(sender_id, message_text):
             send_quick_reply(sender_id, pregunta8, buttons)
 
         elif len(respuestas) == 8:
-            bot.send_text_message(sender_id, "Gracias por responder la pregunta 8. Tu respuesta fue: "+text)
+            sendTyping(sender_id)
+            bot.send_text_message(sender_id, "Ok ya falta menos para terminar "+names[sender_id][0]+" y podrás ver memes sobre el semestre ;)")
+            #sendImageMessage(sender_id, "")
+            #bot.send_text_message(sender_id, "Gracias por responder la pregunta 8. Tu respuesta fue: "+text)
 
-            pregunta9 = "Pensaste que tu vida había sido un fracaso.\n\n*A.* Raramente o ninguna vez (Menos de un día).\n*B.* Alguna o pocas veces (1-2 días).\n*C.* Ocasionalmente o una buena parte del tiempo (3-4 días).\n*D.* La mayor parte o todo el tiempo (5-7 días)."
+            pregunta9 = "9. Necesito hacer un esfuerzo extra para comenzar a hacer algo."
 
             buttons = [
                 {
                     "content_type":"text",
-                    "title":"A",
+                    "title":"Nunca",
                     "payload":"9_a"
                 },
                 {
                     "content_type":"text",
-                    "title":"B",
+                    "title":"De vez en cuando",
                     "payload":"9_b"
                 },
                 {
                     "content_type":"text",
-                    "title":"C",
+                    "title":"Usualmente",
                     "payload":"9_c"
                 },
                 {
                     "content_type":"text",
-                    "title":"D",
+                    "title":"Muy a menudo",
                     "payload":"9_d"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Siempre",
+                    "payload":"9_e"
                 }
             ]
 
@@ -418,30 +494,36 @@ def decideMessage(sender_id, message_text):
             send_quick_reply(sender_id, pregunta9, buttons)
 
         elif len(respuestas) == 9:
-            bot.send_text_message(sender_id, "Gracias por responder la pregunta 9. Tu respuesta fue: "+text)
+            sendTyping(sender_id)
+            #bot.send_text_message(sender_id, "Gracias por responder la pregunta 9. Tu respuesta fue: "+text)
 
-            pregunta10 = "Te sentías con miedo.\n\n*A.* Raramente o ninguna vez (Menos de un día).\n*B.* Alguna o pocas veces (1-2 días).\n*C.* Ocasionalmente o una buena parte del tiempo (3-4 días).\n*D.* La mayor parte o todo el tiempo (5-7 días)."
+            pregunta10 = "10. Me siento con falta de energía y fuerza."
 
             buttons = [
                 {
                     "content_type":"text",
-                    "title":"A",
+                    "title":"Nunca",
                     "payload":"10_a"
                 },
                 {
                     "content_type":"text",
-                    "title":"B",
+                    "title":"De vez en cuando",
                     "payload":"10_b"
                 },
                 {
                     "content_type":"text",
-                    "title":"C",
+                    "title":"Usualmente",
                     "payload":"10_c"
                 },
                 {
                     "content_type":"text",
-                    "title":"D",
+                    "title":"Muy a menudo",
                     "payload":"10_d"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Siempre",
+                    "payload":"10_e"
                 }
             ]
 
@@ -450,7 +532,193 @@ def decideMessage(sender_id, message_text):
 
         elif len(respuestas) == 10:
             sendTyping(sender_id)
-            bot.send_text_message(sender_id, "Gracias por responder la pregunta 10. Tu respuesta fue: "+text)
+            #bot.send_text_message(sender_id, "Gracias por responder la pregunta 9. Tu respuesta fue: "+text)
+
+            pregunta11 = "11. Creo que tengo un aspecto horrible."
+
+            buttons = [
+                {
+                    "content_type":"text",
+                    "title":"Nunca",
+                    "payload":"11_a"
+                },
+                {
+                    "content_type":"text",
+                    "title":"De vez en cuando",
+                    "payload":"11_b"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Usualmente",
+                    "payload":"11_c"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Muy a menudo",
+                    "payload":"11_d"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Siempre",
+                    "payload":"11_e"
+                }
+            ]
+
+            sendTyping(sender_id)
+            send_quick_reply(sender_id, pregunta11, buttons)
+
+        elif len(respuestas) == 11:
+            sendTyping(sender_id)
+            #bot.send_text_message(sender_id, "Gracias por responder la pregunta 9. Tu respuesta fue: "+text)
+
+            pregunta12 = "12. Me siento deprimido."
+
+            buttons = [
+                {
+                    "content_type":"text",
+                    "title":"Nunca",
+                    "payload":"12_a"
+                },
+                {
+                    "content_type":"text",
+                    "title":"De vez en cuando",
+                    "payload":"12_b"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Usualmente",
+                    "payload":"12_c"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Muy a menudo",
+                    "payload":"12_d"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Siempre",
+                    "payload":"12_e"
+                }
+            ]
+
+            sendTyping(sender_id)
+            send_quick_reply(sender_id, pregunta12, buttons)
+
+        elif len(respuestas) == 12:
+            sendTyping(sender_id)
+            #bot.send_text_message(sender_id, "Gracias por responder la pregunta 9. Tu respuesta fue: "+text)
+
+            pregunta13 = "13. Nada me hace feliz."
+
+            buttons = [
+                {
+                    "content_type":"text",
+                    "title":"Nunca",
+                    "payload":"13_a"
+                },
+                {
+                    "content_type":"text",
+                    "title":"De vez en cuando",
+                    "payload":"13_b"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Usualmente",
+                    "payload":"13_c"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Muy a menudo",
+                    "payload":"13_d"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Siempre",
+                    "payload":"13_e"
+                }
+            ]
+
+            sendTyping(sender_id)
+            send_quick_reply(sender_id, pregunta13, buttons)
+
+        elif len(respuestas) == 13:
+            sendTyping(sender_id)
+            #bot.send_text_message(sender_id, "Gracias por responder la pregunta 9. Tu respuesta fue: "+text)
+
+            pregunta14 = "14. Me siento sin esperanza."
+
+            buttons = [
+                {
+                    "content_type":"text",
+                    "title":"Nunca",
+                    "payload":"14_a"
+                },
+                {
+                    "content_type":"text",
+                    "title":"De vez en cuando",
+                    "payload":"14_b"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Usualmente",
+                    "payload":"14_c"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Muy a menudo",
+                    "payload":"14_d"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Siempre",
+                    "payload":"14_e"
+                }
+            ]
+
+            sendTyping(sender_id)
+            send_quick_reply(sender_id, pregunta14, buttons)
+
+        elif len(respuestas) == 14:
+            sendTyping(sender_id)
+            #bot.send_text_message(sender_id, "Gracias por responder la pregunta 9. Tu respuesta fue: "+text)
+
+            pregunta15 = "15. Me siento como si fuese a ser castigado."
+
+            buttons = [
+                {
+                    "content_type":"text",
+                    "title":"Nunca",
+                    "payload":"15_a"
+                },
+                {
+                    "content_type":"text",
+                    "title":"De vez en cuando",
+                    "payload":"15_b"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Usualmente",
+                    "payload":"15_c"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Muy a menudo",
+                    "payload":"15_d"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Siempre",
+                    "payload":"15_e"
+                }
+            ]
+
+            sendTyping(sender_id)
+            send_quick_reply(sender_id, pregunta15, buttons)
+
+        elif len(respuestas) == 15:
+            sendTyping(sender_id)
+            bot.send_text_message(sender_id, "Gracias "+names[sender_id][0]+" , he guardado tus respuestas, estoy procesando los resultados. No desesperes como goku.")
+            sendImageMessage(sender_id, "https://i.imgur.com/L8AWFBf.jpg")
 
     else:
         sendTyping(sender_id)
@@ -467,18 +735,7 @@ def sendButtonMessage(sender_id, text, options):
             "payload":{
                 "template_type":"button",
                 "text":text,
-                "buttons":[
-                    {
-                        "type":"postback",
-                        "title": options[0][0],
-                        "payload": options[0][1]
-                    },
-                    {
-                        "type":"postback",
-                        "title": options[1][0],
-                        "payload": options[1][1]
-                    }
-                ]
+                "buttons":options
             }
         }
     }
