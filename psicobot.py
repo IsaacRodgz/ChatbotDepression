@@ -305,6 +305,13 @@ def decideMessage(sender_id, message_text):
         sendTyping(sender_id)
         bot.send_text_message(sender_id, "Si cambias de opinión háblame de nuevo :)")
 
+    elif "reset_chatbot" in text:
+        respuestas = {}
+        names = {}
+        nivel = {}
+        parafraseo_indices = {}
+        parafraseo = {}
+
     elif "go_to_results" in text:
         sendTyping(sender_id)
         bot.send_text_message(sender_id, nivel[sender_id])
