@@ -263,7 +263,7 @@ def decideMessage(sender_id, message_text):
     elif "go_adelante" in text:
 
         sendTyping(sender_id)
-        bot.send_text_message(sender_id, "Por favor selecciona el botón que contenga la letra que represente su estado actual o el estado con el que mejor se identifique")
+        bot.send_text_message(sender_id, "Por favor selecciona el botón que represente su estado actual o el estado con el que mejor se identifique")
 
         sendTyping(sender_id)
         pregunta1 = "\n1. Me he divertido mucho durante las últimas dos semanas.\n\n"
