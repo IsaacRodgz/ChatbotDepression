@@ -20,6 +20,8 @@ a_token = "EAADZBqZBZC8rAIBAPDztnVHeGZB7slQzZBZBiZBsZBl5XrCrlpJa6Oo5mQr0kfUBdci5
 
 bot = Bot(a_token)
 
+global respuestas, names, nivel, parafraseo_indices, parafraseo, puntajes, parafraseos
+
 respuestas = {}
 names = {}
 nivel = {}
@@ -304,13 +306,6 @@ def decideMessage(sender_id, message_text):
     elif "si_acepta_consentimiento" in text:
         sendTyping(sender_id)
         bot.send_text_message(sender_id, "Si cambias de opinión háblame de nuevo :)")
-
-    elif "reset_chatbot" in text:
-        respuestas = {}
-        names = {}
-        nivel = {}
-        parafraseo_indices = {}
-        parafraseo = {}
 
     elif "go_to_results" in text:
         sendTyping(sender_id)
